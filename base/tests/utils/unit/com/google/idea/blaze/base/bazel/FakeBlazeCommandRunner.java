@@ -50,6 +50,7 @@ public final class FakeBlazeCommandRunner implements BlazeCommandRunner {
     }
   }
 
+  // A fake test results of blaze
   @Override
   public BlazeTestResults runTest(
       Project project,
