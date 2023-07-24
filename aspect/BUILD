@@ -14,6 +14,7 @@ filegroup(
     name = "integration_test_files",
     srcs = [
         "artifacts.bzl",
+         "artifacts.bzl",
         "intellij_info_impl.bzl",
         "java_classpath.bzl",
         "make_variables.bzl",
