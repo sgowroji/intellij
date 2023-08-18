@@ -19,6 +19,9 @@
 # disable job control - don't want async msgs about background jobs
 set +m
 
+# disable job control - don't want async msgs about background jobs
+set +m
+
 # These values can be injected via ~/.gdbserver_wrapper_options
 # inject extra parameters into the gdbserver commandline (e.g. --remote-debug)
 GDBSERVER_WRAPPER_EXTRA_ARGS=""
