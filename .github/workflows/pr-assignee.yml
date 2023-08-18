@@ -5,9 +5,9 @@ on:
 
 jobs:
   assign_based_on_labels:
-   permissions:
-      pull-requests: write
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Check out code
         uses: actions/checkout@v2
