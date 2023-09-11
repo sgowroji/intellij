@@ -4,6 +4,7 @@ load(
     "intellij_plugin_library",
     "optional_plugin_xml",
     "stamped_plugin_xml",
+    "Test"
 )
 load(
     "//testing:test_defs.bzl",
