@@ -26,10 +26,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labelsToAssignees = {
-              'product: CLion': ['tpasternak'],
-              'product: IntelliJ': ['mai93'],
-              'product: GoLand': ['blorente'],
-              'product: Android Studio': ['mai93']
+              'product: CLion': ['tilakrayal'],
+              'product: IntelliJ': ['pjpratik'],
+              'product: GoLand': ['sgowroji'],
+              'product: Android Studio': ['tilakrayal']
               // Add more label-assignee mappings here
             };
 
