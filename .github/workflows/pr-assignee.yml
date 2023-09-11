@@ -1,3 +1,4 @@
+
 name: Auto Assign Labels and Reviewers
 on:
   pull_request_target:
@@ -26,10 +27,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labelsToAssignees = {
-              'product: CLion': ['tilakrayal'],
-              'product: IntelliJ': ['pjpratik'],
-              'product: GoLand': ['sgowroji'],
-              'product: Android Studio': ['tilakrayal']
+              'product: CLion': ['chunduriv'],
+              'product: IntelliJ': ['chunduriv'],
+              'product: GoLand': ['tilakrayal'],
+              'product: Android Studio': ['sgowroji']
               // Add more label-assignee mappings here
             };
 
