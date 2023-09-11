@@ -169,7 +169,7 @@
     </group>
 `
     <group id="Blaze.MainToolBarActionGroup">
-      <add-to-group group-id="MainToolBar" anchor="before" relative-to-action="HelpTopics" />
+      <add-to-group group-id="MainToolbarRight" anchor="before" relative-to-action="HelpTopics" />
       <add-to-group group-id="NavBarToolBarOthers" anchor="last"/>
       <reference id="Blaze.IncrementalSyncProject"/>
     </group>
@@ -226,6 +226,7 @@
     <daemon.highlightInfoFilter implementation="com.google.idea.blaze.base.qsync.QuerySyncHighlightingFilter"/>
     <trafficLightRendererContributor implementation="com.google.idea.blaze.base.qsync.QuerySyncTrafficLightRendererContributor"/>
 
+    <projectService serviceImplementation="com.google.idea.blaze.base.command.info.BlazeInfoProvider"/>
     <projectService serviceImplementation="com.google.idea.blaze.base.sync.SyncPhaseCoordinator"/>
     <projectService serviceInterface="com.google.idea.blaze.base.sync.status.BlazeSyncStatus"
                     serviceImplementation="com.google.idea.blaze.base.sync.status.BlazeSyncStatusImpl"/>
@@ -446,6 +447,8 @@
                     interface="com.google.idea.blaze.base.io.AbsolutePathPatcher"/>
     <extensionPoint qualifiedName="com.google.idea.blaze.qsync.ArtifactFetcher"
                     interface="com.google.idea.blaze.base.qsync.cache.ArtifactFetcher"/>
+    <extensionPoint qualifiedName="com.google.idea.blaze.base.qsync.HandledRulesProvider"
+      interface="com.google.idea.blaze.base.qsync.HandledRulesProvider" />
   </extensionPoints>
 
   <application-components>
@@ -535,6 +538,7 @@
     <SyncListener implementation="com.google.idea.blaze.base.sync.libraries.ExternalLibraryManager$StartSyncListener"/>
     <SyncListener implementation="com.google.idea.blaze.base.sync.autosync.ProjectTargetManagerImpl$TargetSyncListener"/>
     <SyncListener implementation="com.google.idea.blaze.base.lang.buildfile.language.semantics.BuildLanguageSpecProviderImpl$Listener"/>
+    <SyncListener implementation="com.google.idea.blaze.base.command.info.BlazeInfoProvider$Invalidator"/>
     <SyncPlugin implementation="com.google.idea.blaze.base.lang.buildfile.sync.BuildLangSyncPlugin"/>
     <SyncPlugin implementation="com.google.idea.blaze.base.sync.libraries.ExternalLibraryManager$SyncPlugin"/>
     <BuildFlagsProvider implementation="com.google.idea.blaze.base.command.BuildFlagsProviderImpl"/>
@@ -608,6 +612,7 @@
     <ExperimentLoader implementation="com.google.idea.common.experiments.SystemPropertyExperimentLoader" order="first" id="SystemPropertyExperimentLoader"/>
     <ExperimentLoader implementation="com.google.idea.common.experiments.UserOverridesExperimentLoader" order="after SystemPropertyExperimentLoader" id="UserOverridesExperimentLoader"/>
     <ExperimentLoader implementation="com.google.idea.common.experiments.DefaultValuesExperimentLoader" order="last" id="DefaultValuesExperimentLoader"/>
+    <ExperimentLoader implementation="com.google.idea.blaze.base.qsync.settings.QuerySyncSettingsExperimentLoader" order="after UserOverridesExperimentLoader" id="QuerySyncSettingsExperimentLoader"/>
   </extensions>
   <extensions defaultExtensionNs="com.google.idea.blaze.qsync">
     <ArtifactFetcher implementation="com.google.idea.blaze.base.qsync.cache.FileApiArtifactFetcher"/>

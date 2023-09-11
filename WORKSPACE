@@ -453,16 +453,24 @@ http_archive(
 http_archive(
     name = "android_studio_2023_1",
     build_file = "@//intellij_platform_sdk:BUILD.android_studio231",
-    sha256 = "9c670055da4f934cf4181df0813feb53818503f242f964fddb180fd1ced121b3",
-    url = "https://dl.google.com/dl/android/studio/ide-zips/2023.1.1.11/android-studio-2023.1.1.11-linux.tar.gz",
+    sha256 = "8bc1cda24e696bc60dad4426afd08d46643d3a815e75f2ebe6133482beff3df0",
+    url = "https://dl.google.com/dl/android/studio/ide-zips/2023.1.1.16/android-studio-2023.1.1.16-linux.tar.gz",
 )
 
 # The plugin api for android_studio_2022_3 android_studio. This is required to build ASwB and run integration tests
 http_archive(
     name = "android_studio_2022_3",
     build_file = "@//intellij_platform_sdk:BUILD.android_studio223",
-    sha256 = "5b2e6289fb1c2f52a8ed9227c7fb80bf2272338712e8b7d3616c5d25b664ea9a",
-    url = "https://dl.google.com/dl/android/studio/ide-zips/2022.3.1.12/android-studio-2022.3.1.12-linux.tar.gz",
+    sha256 = "250625dcab183e0c68ebf12ef8a522af7369527d76f1efc704f93c05b02ffa9e",
+    url = "https://dl.google.com/dl/android/studio/ide-zips/2022.3.1.19/android-studio-2022.3.1.19-linux.tar.gz",
+)
+
+http_archive(
+    name = "rules_java",
+    urls = [
+        "https://github.com/bazelbuild/rules_java/releases/download/6.5.1/rules_java-6.5.1.tar.gz",
+    ],
+    sha256 = "7b0d9ba216c821ee8697dedc0f9d0a705959ace462a3885fe9ba0347ba950111",
 )
 
 JUNIT_ARTIFACT = "junit:junit:4.13.2"
@@ -710,11 +718,11 @@ rules_proto_dependencies()
 rules_proto_toolchains()
 
 # LICENSE: The Apache Software License, Version 2.0
-rules_scala_version = "30f8fbe042b835cc2173a474a6a2b360cd4d440f"
+rules_scala_version = "a42f009ded929070d5c412284c50ba08f0f9e8b8"
 
 http_archive(
     name = "io_bazel_rules_scala",
-    sha256 = "8ecb882997ebbaea341981c63c538674815cabb5b50a0a331ff770c597578715",
+    sha256 = "0074836b631caaf552fd7013d49f18fa5f0a27c86bb1b88bd3fa9371fa36b2c9",
     strip_prefix = "rules_scala-%s" % rules_scala_version,
     type = "zip",
     url = "https://github.com/bazelbuild/rules_scala/archive/%s.zip" % rules_scala_version,
@@ -834,8 +842,17 @@ jvm_maven_import_external(
     server_urls = ["https://repo1.maven.org/maven2"],
 )
 
+jvm_maven_import_external(
+    name = "io_netty_netty_transport_classes_kqueue",
+    artifact = "io.netty:netty-transport-classes-kqueue:4.1.96.Final",
+    artifact_sha256 = "f2f1fab3b297aee20a3922c79b548c8b4b72bb10b635375434c108ee05f29430",
+    licenses = ["notice"],  # Apache 2.0
+    server_urls = ["https://repo1.maven.org/maven2"],
+)
+
 # io_grpc_grpc_java dependencies
 load("@io_grpc_grpc_java//:repositories.bzl", "IO_GRPC_GRPC_JAVA_ARTIFACTS", "IO_GRPC_GRPC_JAVA_OVERRIDE_TARGETS", "grpc_java_repositories")
+
 grpc_java_repositories()
 
 # Java Maven-based repositories.
@@ -847,12 +864,15 @@ http_archive(
 )
 
 load("@rules_jvm_external//:repositories.bzl", "rules_jvm_external_deps")
+
 rules_jvm_external_deps()
 
 load("@rules_jvm_external//:setup.bzl", "rules_jvm_external_setup")
+
 rules_jvm_external_setup()
 
 load("@rules_jvm_external//:defs.bzl", "maven_install")
+
 maven_install(
     artifacts = IO_GRPC_GRPC_JAVA_ARTIFACTS,
     generate_compat_repositories = True,
@@ -865,4 +885,8 @@ maven_install(
 )
 
 load("@maven//:compat.bzl", "compat_repositories")
+
 compat_repositories()
+
+# Register custom java 17 toolchain
+register_toolchains("//:custom_java_17_toolchain_definition")

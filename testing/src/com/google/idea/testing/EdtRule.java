@@ -15,7 +15,6 @@
  */
 package com.google.idea.testing;
 
-import com.google.idea.sdkcompat.BaseSdkTestCompat;
 import com.intellij.testFramework.EdtTestUtil;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -29,7 +28,7 @@ public class EdtRule implements TestRule {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        BaseSdkTestCompat.replaceIdeEventQueueSafely();
+        TestRunnerUtilCompat.replaceIdeEventQueueSafely();
         EdtTestUtil.runInEdtAndWait(base::evaluate);
       }
     };

@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.idea.blaze.base.bazel.BuildSystem;
 import com.google.idea.blaze.base.bazel.BuildSystemProvider;
@@ -26,6 +27,8 @@ import com.google.idea.blaze.base.command.buildresult.OutputArtifact;
 import com.google.idea.blaze.base.model.primitives.WorkspaceRoot;
 import com.google.idea.blaze.base.projectview.ProjectViewManager;
 import com.google.idea.blaze.base.projectview.ProjectViewSet;
+import com.google.idea.blaze.base.projectview.section.Glob;
+import com.google.idea.blaze.base.projectview.section.sections.TestSourceSection;
 import com.google.idea.blaze.base.qsync.cache.ArtifactFetcher;
 import com.google.idea.blaze.base.qsync.cache.ArtifactTrackerImpl;
 import com.google.idea.blaze.base.scope.BlazeContext;
@@ -47,6 +50,7 @@ import com.google.idea.blaze.qsync.ParallelPackageReader;
 import com.google.idea.blaze.qsync.ProjectRefresher;
 import com.google.idea.blaze.qsync.VcsStateDiffer;
 import com.google.idea.blaze.qsync.project.ProjectDefinition;
+import com.google.idea.blaze.qsync.project.ProjectPath;
 import com.intellij.openapi.project.Project;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -106,24 +110,35 @@ public class ProjectLoader {
     WorkspaceLanguageSettings workspaceLanguageSettings =
         LanguageSupport.createWorkspaceLanguageSettings(projectViewSet);
 
+    ImmutableSet<String> testSourceGlobs =
+        projectViewSet.listItems(TestSourceSection.KEY).stream()
+            .map(Glob::toString)
+            .collect(ImmutableSet.toImmutableSet());
+
     ProjectDefinition latestProjectDef =
         ProjectDefinition.create(
             importRoots.rootPaths(),
             importRoots.excludePaths(),
-            LanguageClasses.translateFrom(workspaceLanguageSettings.getActiveLanguages()));
+            LanguageClasses.translateFrom(workspaceLanguageSettings.getActiveLanguages()),
+            testSourceGlobs);
 
     Path snapshotFilePath = getSnapshotFilePath(importSettings);
 
+    ImmutableSet<String> handledRules = getHandledRuleKinds();
     DependencyBuilder dependencyBuilder =
-        createDependencyBuilder(workspaceRoot, importRoots, buildSystem);
+        createDependencyBuilder(workspaceRoot, importRoots, buildSystem, handledRules);
     RenderJarBuilder renderJarBuilder = createRenderJarBuilder(buildSystem);
+
+    Path ideProjectBasePath = Paths.get(checkNotNull(project.getBasePath()));
+    ProjectPath.Resolver projectPathResolver =
+        ProjectPath.Resolver.create(workspaceRoot.path(), ideProjectBasePath);
 
     BlazeProject graph = new BlazeProject();
     ArtifactFetcher<OutputArtifact> artifactFetcher = createArtifactFetcher();
     ArtifactTrackerImpl artifactTracker =
         new ArtifactTrackerImpl(
             BlazeDataStorage.getProjectDataDir(importSettings).toPath(),
-            Paths.get(checkNotNull(project.getBasePath())),
+            ideProjectBasePath,
             artifactFetcher);
     artifactTracker.initialize();
     DependencyTracker dependencyTracker =
@@ -136,11 +151,13 @@ public class ProjectLoader {
             createWorkspaceRelativePackageReader(),
             vcsHandler.map(BlazeVcsHandler::getVcsStateDiffer).orElse(VcsStateDiffer.NONE),
             workspaceRoot.path(),
-            graph::getCurrent);
+            graph::getCurrent,
+            handledRules);
     QueryRunner queryRunner = createQueryRunner(buildSystem);
     ProjectQuerier projectQuerier = createProjectQuerier(projectRefresher, queryRunner, vcsHandler);
     ProjectUpdater projectUpdater =
-        new ProjectUpdater(project, importSettings, projectViewSet, workspaceRoot);
+        new ProjectUpdater(
+            project, importSettings, projectViewSet, workspaceRoot, projectPathResolver);
     graph.addListener(projectUpdater);
     QuerySyncSourceToTargetMap sourceToTargetMap =
         new QuerySyncSourceToTargetMap(graph, workspaceRoot.path());
@@ -178,8 +195,12 @@ public class ProjectLoader {
   }
 
   protected DependencyBuilder createDependencyBuilder(
-      WorkspaceRoot workspaceRoot, ImportRoots importRoots, BuildSystem buildSystem) {
-    return new BazelDependencyBuilder(project, buildSystem, importRoots, workspaceRoot);
+      WorkspaceRoot workspaceRoot,
+      ImportRoots importRoots,
+      BuildSystem buildSystem,
+      ImmutableSet<String> handledRuleKinds) {
+    return new BazelDependencyBuilder(
+        project, buildSystem, importRoots, workspaceRoot, handledRuleKinds);
   }
 
   protected RenderJarBuilder createRenderJarBuilder(BuildSystem buildSystem) {
@@ -193,5 +214,18 @@ public class ProjectLoader {
   private ArtifactFetcher<OutputArtifact> createArtifactFetcher() {
     return new DynamicallyDispatchingArtifactFetcher(
         ImmutableList.copyOf(ArtifactFetcher.EP_NAME.getExtensions()));
+  }
+
+  /**
+   * Returns an {@link ImmutableSet} of rule kinds that query sync or plugin know how to resolve
+   * symbols for without building. The rules query sync always builds even if they are part of the
+   * project are in {@link BlazeQueryParser.ALWAYS_BUILD_RULE_KINDS}
+   */
+  private ImmutableSet<String> getHandledRuleKinds() {
+    ImmutableSet.Builder<String> defaultRules = ImmutableSet.builder();
+    for (HandledRulesProvider ep : HandledRulesProvider.EP_NAME.getExtensionList()) {
+      defaultRules.addAll(ep.handledRuleKinds());
+    }
+    return defaultRules.build();
   }
 }

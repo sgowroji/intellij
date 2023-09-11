@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.collect.Sets.SetView;
 import com.google.common.collect.Streams;
 import com.google.idea.blaze.common.BuildTarget;
 import com.google.idea.blaze.common.Context;
@@ -47,7 +48,7 @@ public class BlazeQueryParser {
 
   // Rules that will need to be built, whether or not the target is included in the
   // project.
-  public static final ImmutableSet<String> ALWAYS_BUILD_RULE_TYPES =
+  public static final ImmutableSet<String> ALWAYS_BUILD_RULE_KINDS =
       ImmutableSet.of(
           "java_proto_library",
           "java_lite_proto_library",
@@ -56,10 +57,19 @@ public class BlazeQueryParser {
           "kt_proto_library_helper",
           "_java_grpc_library",
           "_java_lite_grpc_library",
+          "kt_grpc_library_helper",
           "java_stubby_library",
           "aar_import");
+
   private static final ImmutableSet<String> JAVA_RULE_TYPES =
-      ImmutableSet.of("java_library", "java_binary", "kt_jvm_library_helper", "java_test");
+      ImmutableSet.of(
+          "java_library",
+          "java_binary",
+          "kt_jvm_library_helper",
+          "java_test",
+          "java_proto_library",
+          "java_lite_proto_library",
+          "java_mutable_proto_library");
   private static final ImmutableSet<String> ANDROID_RULE_TYPES =
       ImmutableSet.of(
           "android_library",
@@ -69,9 +79,11 @@ public class BlazeQueryParser {
           "kt_android_library_helper");
 
   private final Context<?> context;
+  private final SetView<String> alwaysBuildRuleKinds;
 
-  public BlazeQueryParser(Context context) {
+  public BlazeQueryParser(Context<?> context, ImmutableSet<String> handledRuleKinds) {
     this.context = context;
+    this.alwaysBuildRuleKinds = Sets.difference(ALWAYS_BUILD_RULE_KINDS, handledRuleKinds);
   }
 
   private static boolean isJavaRule(String ruleClass) {
@@ -163,7 +175,8 @@ public class BlazeQueryParser {
             targetSources.put(ruleEntry.getKey(), Label.of(ruleEntry.getValue().getManifest()));
           }
         }
-      } else if (ALWAYS_BUILD_RULE_TYPES.contains(ruleClass)) {
+      }
+      if (alwaysBuildRuleKinds.contains(ruleClass)) {
         projectTargetsToBuild.add(ruleEntry.getKey());
       }
     }
@@ -171,7 +184,7 @@ public class BlazeQueryParser {
 
     // Calculate all the dependencies outside the project.
     for (Label dep : deps) {
-      if (!ruleDeps.containsKey(dep)) {
+      if (!query.getRulesMap().containsKey(dep)) {
         projectDeps.add(dep);
       }
     }
