@@ -23,10 +23,6 @@ jobs:
       pull-requests: write
     needs : add_labels
     steps:   
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
       - name: Add Assignees
         uses: actions/github-script@v4
         
