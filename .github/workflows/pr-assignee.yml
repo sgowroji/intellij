@@ -4,7 +4,7 @@ on:
     types: ["opened", "reopened", "ready_for_review"]
 
 jobs:
-  assign_based_on_labels:
+  add_labels:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -15,8 +15,14 @@ jobs:
      
       - name: Add Labels
         uses: actions/labeler@v4
-        if: ${{ github.event.pull_request.draft == false }} 
-       
+        if: ${{ github.event.pull_request.draft == false }}
+  add_reviewers:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    needs : add_labels
+    steps:   
       - name: Add Assignees
         uses: actions/github-script@v4
         
