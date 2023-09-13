@@ -13,11 +13,11 @@ jobs:
     - uses: actions/labeler@v4
     if: ${{ github.event.pull_request.draft == false }} 
   assign_based_on_labels:
+    needs: triage
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
-    needs: triage
     if: needs.triage.${{ github.event.pull_request.draft == false }} 
     steps:
       - name: Check out code
