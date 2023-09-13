@@ -3,6 +3,8 @@
 This is an early-access version of our Bazel plugins for IntelliJ,
 Android Studio, and CLion.
 
+test
+
 The Bazel plugin uploaded to the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/8609-bazel) 
 regularly from the state of this repository. See the [releases](https://github.com/bazelbuild/intellij/releases) 
 tab for more information.
