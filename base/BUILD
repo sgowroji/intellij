@@ -2,6 +2,7 @@ load(
     "//build_defs:build_defs.bzl",
     "intellij_plugin",
     "intellij_plugin_library",
+     "stamped_plugin_xml",
     "stamped_plugin_xml",
 )
 load(
