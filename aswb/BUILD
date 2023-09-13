@@ -10,6 +10,7 @@ load(
     "plugin_deploy_zip",
     "repackaged_files",
     "stamped_plugin_xml",
+        "stamped_plugin_xml",
 )
 load(
     "//build_defs:intellij_plugin_debug_target.bzl",
