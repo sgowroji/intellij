@@ -15,6 +15,7 @@ jobs:
   assign_based_on_labels:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
     needs: triage
     steps:
