@@ -18,7 +18,9 @@ jobs:
         if: ${{ github.event.pull_request.draft == false }} 
        
       - name: Add Assignees
-        uses: actions/github-script@v4
+        # uses: actions/github-script@v4
+        uses: Naturalclar/issue-action@v2.0.2
+        
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
