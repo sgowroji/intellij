@@ -18,7 +18,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-    if: needs.triage.${{ github.event.pull_request.draft == false }} 
+    if: contains(steps.label-the-PR.outputs.all-labels, 'awaiting-review')
     steps:
       - name: Check out code
         uses: actions/checkout@v2
