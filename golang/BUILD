@@ -8,6 +8,8 @@ load(
     "intellij_plugin",
     "intellij_plugin_library",
     "optional_plugin_xml",
+    "optional_plugin_xml",
+    "stamped_plugin_xml",
     "stamped_plugin_xml",
 )
 load(
