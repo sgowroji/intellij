@@ -29,22 +29,19 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const labels = context.payload.pull_request.labels.map(label => label.name);
             const labelsToAssignees = {
               'product: CLion': ['sgowroji'],
               'product: IntelliJ': ['tilakrayal'],
               'product: GoLand': ['chunduriv'],
               'product: Android Studio': ['sgowroji']
             };
-
-            const labels = context.payload.pull_request.labels.map(label => label.name);
             const assignees = [];
-
             for (const label of labels) {
               if (label in labelsToAssignees) {
                 assignees.push(...labelsToAssignees[label]);
               }
             }
-
             if (assignees.length > 0) {
               const issue_number = context.payload.pull_request.number;
               await github.issues.addAssignees({
