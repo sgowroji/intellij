@@ -14,6 +14,7 @@
 #     does not delete the temp directory containing four files containing the
 #     stdout/stderr of the gdbserver and inferior processes:
 #      gdbserver.out, gdbserver.err, inferior.out, inferior.err
+#      gdbserver.out, gdbserver.err, inferior.out, inferior.err
 #
 
 # disable job control - don't want async msgs about background jobs
