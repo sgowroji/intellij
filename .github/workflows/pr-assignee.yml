@@ -25,8 +25,8 @@ jobs:
         uses: actions/github-script@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          needs : add_label
           script: |
+            needs : add_label
             const labels = context.payload.pull_request.labels.map(label => label.name);
             const assignees = [];
             const labelsToAssignees = {
