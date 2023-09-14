@@ -16,6 +16,8 @@
 package com.google.idea.blaze.cpp;
 
 import com.google.common.collect.ImmutableSet;
+
+import com.google.common.collect.ImmutableSet;
 import com.google.idea.blaze.base.model.BlazeProjectData;
 import com.google.idea.blaze.base.model.primitives.LanguageClass;
 import com.google.idea.blaze.base.model.primitives.WorkspaceRoot;
