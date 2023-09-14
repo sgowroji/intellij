@@ -28,7 +28,6 @@ jobs:
           needs : add_label
           script: |
             const labels = context.payload.pull_request.labels.map(label => label.name);
-            echo "$labels" 
             const assignees = [];
             const labelsToAssignees = {
               'product: CLion': ['sgowroji'],
