@@ -29,7 +29,7 @@ jobs:
           script: |
             const labels = context.payload.pull_request.labels.map(label => label.name);
             const assignees = [];
-            console.log("added labels are ::::",labels)
+            run: echo "$labels"
             const labelsToAssignees = {
               'product: CLion': ['sgowroji'],
               'product: IntelliJ': ['tilakrayal'],
@@ -37,13 +37,13 @@ jobs:
               'product: Android Studio': ['sgowroji']
               // Add more label-assignee mappings here
             };
-            console.log("added assignee are ::::",labelsToAssignees)
+            run: echo "$labelsToAssignees"
             for (const label of labels) {
               if (label in labelsToAssignees) {
                 assignees.push(...labelsToAssignees[label]);
               }
             }
-            console.log("added assignee are ::::",assignees)
+            run: echo "$assignees"
             if (assignees.length > 0) {
               const issue_number = context.payload.pull_request.number;
               await github.issues.addAssignees({
