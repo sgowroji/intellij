@@ -7,6 +7,7 @@ module.exports =  async ({ github, context }) => {
                 repo: context.repo.repo,
                 issue_number,
                });
+            console.log(issueDetails)
             let labels = issueDetails.labels
             console.log("line 30",labels)
             const assignees = [];
