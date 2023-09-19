@@ -1,7 +1,7 @@
 module.exports =  async ({ github, context }) => {
             // await delay(5000);
             // const labels = context.payload.pull_request.labels.map(label => label.name);
-            let issueDetails =  await github.rest.issues.get({
+            let issueDetails =  await github.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
               issue_number,
