@@ -1,5 +1,5 @@
 module.exports =  async ({ github, context }) => {
-            await delay(5000);
+            // await delay(5000);
             const labels = context.payload.pull_request.labels.map(label => label.name);
             console.log("line 30",labels)
             const assignees = [];
