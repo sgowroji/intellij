@@ -1,7 +1,7 @@
 #
 # Description: Builds clwb
 #
-
+load("//:version.bzl", "VERSION")
 load("//:version.bzl", "VERSION")
 load(
     "//build_defs:build_defs.bzl",
