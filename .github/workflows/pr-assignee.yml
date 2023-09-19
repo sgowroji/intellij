@@ -21,10 +21,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+        with:
+          version: 'v2'
 
       - name: Set Assignees
         uses: actions/github-script@v4
         with:
+          version: 'v4'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labels = context.payload.pull_request.labels.map(label => label.name);
