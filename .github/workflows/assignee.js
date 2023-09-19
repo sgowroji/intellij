@@ -1,10 +1,11 @@
 module.exports =  async ({ github, context }) => {
             // await delay(5000);
             // const labels = context.payload.pull_request.labels.map(label => label.name);
+            let issue_number = context.payload.pull_request.number;
             let issueDetails =  await github.issues.get({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-              issue_number,
+                issue_number,
                });
             let labels = issueDetails.labels
             console.log("line 30",labels)
@@ -22,7 +23,6 @@ module.exports =  async ({ github, context }) => {
               }
             }
             if (assignees.length > 0) {
-              const issue_number = context.payload.pull_request.number;
               await github.issues.addAssignees({
                 issue_number,
                 owner: context.repo.owner,
