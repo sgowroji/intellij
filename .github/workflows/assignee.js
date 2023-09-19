@@ -1,6 +1,13 @@
 module.exports =  async ({ github, context }) => {
             // await delay(5000);
-            const labels = context.payload.pull_request.labels.map(label => label.name);
+            // const labels = context.payload.pull_request.labels.map(label => label.name);
+            console.log("line 30",labels)
+            let issueDetails =  await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              issue_number,
+               });
+            let labels = issueDetails.labels
             console.log("line 30",labels)
             const assignees = [];
             const labelsToAssignees = {
@@ -11,8 +18,8 @@ module.exports =  async ({ github, context }) => {
               // Add more label-assignee mappings here
             };
             for (const label of labels) {
-              if (label in labelsToAssignees) {
-                assignees.push(...labelsToAssignees[label]);
+              if (label.name in labelsToAssignees) {
+                assignees.push(...labelsToAssignees[label.name]);
               }
             }
             if (assignees.length > 0) {
