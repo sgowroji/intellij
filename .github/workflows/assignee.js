@@ -8,7 +8,7 @@ module.exports =  async ({ github, context }) => {
                 issue_number,
                });
             console.log(issueDetails)
-            let labels = issueDetails.labels
+            let labels = issueDetails.data.labels
             console.log("line 30",labels)
             const assignees = [];
             const labelsToAssignees = {
