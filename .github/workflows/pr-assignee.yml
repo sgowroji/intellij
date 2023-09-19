@@ -31,10 +31,10 @@ jobs:
             const assignees = [];
             console.log("added labels are ::::",labels)
             const labelsToAssignees = {
-              'product: CLion': ['tpasternak'],
-              'product: IntelliJ': ['mai93'],
-              'product: GoLand': ['blorente'],
-              'product: Android Studio': ['mai93']
+              'product: CLion': ['sgowroji'],
+              'product: IntelliJ': ['tilakrayal'],
+              'product: GoLand': ['chunduriv'],
+              'product: Android Studio': ['sgowroji']
               // Add more label-assignee mappings here
             };
             console.log("added assignee are ::::",labelsToAssignees)
