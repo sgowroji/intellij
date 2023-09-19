@@ -21,7 +21,10 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
+      - name: WaitForLabel
+      - uses: GuillaumeFalourd/wait-sleep-action@v1
+        with:
+          time: '60'
       - name: Set Assignees
         uses: actions/github-script@v4
         with:
