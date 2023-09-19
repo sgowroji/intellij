@@ -1,4 +1,4 @@
- async ({ github, context }) => {
+module.exports =  async ({ github, context }) => {
             await sleep(10000)
             const labels = context.payload.pull_request.labels.map(label => label.name);
             console.log("line 30",labels)
