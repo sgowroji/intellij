@@ -26,5 +26,31 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const script = require('./\.github/workflows/assignee.js')
-            script({github, context})
+            let issue_number = context.payload.pull_request.number;
+            let issueDetails =  await github.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number,
+               });
+            let labels = issueDetails.data.labels
+            const assignees = [];
+            const labelsToAssignees = {
+              'product: CLion': ['sgowroji'],
+              'product: IntelliJ': ['tilakrayal'],
+              'product: GoLand': ['chunduriv'],
+              'product: Android Studio': ['sgowroji']
+              // Add more label-assignee mappings here
+            };
+            for (const label of labels) {
+              if (label.name in labelsToAssignees) {
+                assignees.push(...labelsToAssignees[label.name]);
+              }
+            }
+            if (assignees.length > 0) {
+              await github.issues.addAssignees({
+                issue_number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                assignees
+              });
+            }
