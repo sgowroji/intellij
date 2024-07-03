@@ -3,6 +3,11 @@ load(
     "GOLANG_PACKAGES_VISIBILITY",
     "PLUGIN_PACKAGES_VISIBILITY",
 )
+# load(
+#     "//:build-visibility.bzl",
+#     "GOLANG_PACKAGES_VISIBILITY",
+#     "PLUGIN_PACKAGES_VISIBILITY",
+# )
 load(
     "//build_defs:build_defs.bzl",
     "intellij_plugin",
