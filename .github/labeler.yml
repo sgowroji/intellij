@@ -1,9 +1,9 @@
 # Add 'awaiting-review' to any PR opened
 awaiting-review:
   - changed-files:
-    - any-glob-to-any-file: '**/*'
+    - any-glob-to-any-file: ['**/*']
 
-product: CLion:
+'product: CLion':
   - changed_files:
     -  any-glob-to-any-file: 
        - clwb/**/*
@@ -17,7 +17,7 @@ product: CLion:
        - intellij_platform_sdk/BUILD.clion231
        - intellij_platform_sdk/BUILD.clion232
 
-product: IntelliJ:
+'product: IntelliJ':
  - changed_files:
     -  any-glob-to-any-file: 
        - base/**/*
@@ -41,7 +41,7 @@ product: IntelliJ:
        - intellij_platform_sdk/BUILD.ue231
        - intellij_platform_sdk/BUILD.ue232
 
-product: GoLand:
+'product: GoLand':
  - changed_files:
     -  any-glob-to-any-file:
        - base/**/*
