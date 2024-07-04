@@ -1,7 +1,7 @@
 import run_configurations/fragment.bazelproject
 
 directories:
-  # Add the directories you want added as source here
+  # Add the directories you want added as source
   hi
   greeting_lib
   run_configurations
