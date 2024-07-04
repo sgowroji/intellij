@@ -15,6 +15,11 @@ load(
     "JAVASCRIPT_PACKAGES_VISIBILITY",
     "PLUGIN_PACKAGES_VISIBILITY",
 )
+load(
+    "//:build-visibility.bzl",
+    "JAVASCRIPT_PACKAGES_VISIBILITY",
+    "PLUGIN_PACKAGES_VISIBILITY",
+)
 
 licenses(["notice"])
 
