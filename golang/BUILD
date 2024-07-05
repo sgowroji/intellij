@@ -1,3 +1,4 @@
+
 load(
     "//:build-visibility.bzl",
     "GOLANG_PACKAGES_VISIBILITY",
