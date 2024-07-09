@@ -3,6 +3,7 @@ load(
     "DEFAULT_TEST_VISIBILITY",
     "PLUGIN_PACKAGES_VISIBILITY",
 )
+test
 load(
     "//build_defs:build_defs.bzl",
     "intellij_plugin",
