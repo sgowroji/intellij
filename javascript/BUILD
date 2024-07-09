@@ -5,6 +5,7 @@ load(
     "optional_plugin_xml",
     "stamped_plugin_xml",
 )
+test
 load(
     "//testing:test_defs.bzl",
     "intellij_integration_test_suite",
