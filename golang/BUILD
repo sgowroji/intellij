@@ -11,6 +11,14 @@ load(
     "stamped_plugin_xml",
 )
 load(
+    "//build_defs:build_defs.bzl",
+    "intellij_plugin",
+    "intellij_plugin_library",
+    "optional_plugin_xml",
+    "stamped_plugin_xml",
+)
+
+load(
     "//testing:test_defs.bzl",
     "intellij_integration_test_suite",
     "intellij_unit_test_suite",
